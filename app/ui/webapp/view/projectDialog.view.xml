@@ -1,0 +1,44 @@
+<mvc:View
+    controllerName="ui.controller.projectDialog"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Dialog
+        id="projectDialog"
+        title="Open Project"
+        contentWidth="95%"
+        contentHeight="95%"
+        afterClose="onDialogClose">
+        <content>
+            <VBox>
+                <List
+                    id="projectList"
+                    mode="SingleSelectMaster"
+                    items="{ 
+                        path: 'myModel>/document', 
+                        sorter: {
+                            path: 'name', 
+                            descending: false
+                        }
+                    }">
+                    <items>
+                        <StandardListItem
+                            title="{myModel>name}"/>
+                    </items>
+                </List>
+                <HBox>
+                    <Input
+                        id="newProjectInput"
+                        placeholder="Enter new project name"/>
+                    <Button
+                        text="Create"
+                        press="onCreateNewProject"/>
+                </HBox>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button
+                text="Open"
+                press="onOpenPress"/>
+        </beginButton>
+    </Dialog>
+</mvc:View>

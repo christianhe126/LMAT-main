@@ -1,0 +1,59 @@
+{
+  "name": "LMAT",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js-community/odata-v2-adapter": "^1.12.9",
+    "@cliqz/adblocker-puppeteer": "^1.30.0",
+    "@puppeteer/replay": "^3.0.0",
+    "@sap/cds": "^7",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.9.21",
+    "add": "^2.0.6",
+    "axios": "^1.7.1",
+    "chai": "^5.1.1",
+    "cross-fetch": "^4.0.0",
+    "express": "^4",
+    "jsdom": "^24.1.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
+    "node-html-parser": "^6.1.13",
+    "puppeteer": "^22.12.1",
+    "sharp": "^0.33.4",
+    "sqlite": "^5.1.1",
+    "uuid": "^10.0.0",
+    "yarn": "^1.22.22"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^1.6.0",
+    "@sap/ux-specification": "^1.84.87",
+    "chai": "^4",
+    "mocha": "^9"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-ui": "cds watch --open ui/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-project1": "cds watch --open project1/webapp/index.html?sap-ui-xx-viewCache=false",
+    "test": "mocha test/**/*.js --timeout 10000"
+  },
+  "sapux": [
+    "app/ui",
+    "app/project1"
+  ],
+  "cds": {
+    "requires": {
+      "db": {
+          "kind": "sqlite",
+          "model": "db/schema",
+          "credentials": {
+              "database": "db.sqlite"
+          }
+      }
+    },
+    "cov2ap": {
+      "plugin": true
+    }
+  }
+}

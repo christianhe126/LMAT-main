@@ -1,0 +1,153 @@
+{
+  "_version": "1.49.0",
+  "sap.app": {
+    "id": "ui",
+    "type": "application",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "i18n": {
+      "bundleUrl": "i18n/i18n.properties",
+      "supportedLocales": [""],
+      "fallbackLocale": ""
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.8.5",
+      "toolsId": "f8ee46c5-0738-49c8-8953-62a7701aeedd"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/browse/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      },
+      "myODataService": {
+        "uri": "/odata/v2/browse/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.123.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "test": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {
+          "defaultBindingMode": "TwoWay"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": false,
+        "settings": {
+          "synchronizationMode": "None",
+				  "operationMode": "Server",
+				  "autoExpandSelect": true
+        }
+      },
+      "myModel": {
+        "dataSource": "myODataService",
+        "settings": {
+          "synchronizationMode": "None",
+				  "operationMode": "Server",
+				  "autoExpandSelect": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "async": true,
+        "path":"ui.view",
+        "controlId": "app",
+        "controlAggregation": "pages"
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "default",
+          "target": "master"
+        },
+        {
+          "pattern": "document/{documentID}",
+          "name": "document",
+          "target": "master"
+        }
+      ],
+      "targets": {
+        "master": {
+					"name": "Master",
+          "id": "master"
+				}
+      }
+    },
+    "rootView": {
+      "viewName": "ui.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "app"
+    },
+    "config": {
+			"sample": {
+				"files": [
+					"Main.view.xml",
+					"Main.controller.js",
+					"manifest.json"
+				]
+			}
+		}
+  }
+}

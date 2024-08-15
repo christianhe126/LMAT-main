@@ -1,0 +1,30 @@
+specVersion: "2.5"
+metadata:
+  name: ui
+type: application
+---
+specVersion: '2.1'
+kind: extension
+type: project-shim
+metadata:
+  name: thirdparty # this can be your project shim name
+shims:
+  configurations:
+    lodash: # name as defined in package.json
+      specVersion: '2.1'
+      type: module # Use module type
+      metadata:
+        name: lodash
+      resources:
+        configuration:
+          paths:
+            /resources/thirdparty/lodash/: ''  # location where modules are stored
+    moment: # name as defined in package.json
+      specVersion: '2.1'
+      type: module # Use module type
+      metadata:
+        name: moment
+      resources:
+        configuration:
+          paths:
+            /resources/thirdparty/moment/: ''  # location where modules are stored

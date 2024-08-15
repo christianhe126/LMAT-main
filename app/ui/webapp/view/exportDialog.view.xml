@@ -1,0 +1,80 @@
+<mvc:View
+    controllerName="ui.controller.exportDialog"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:unified="sap.ui.unified">
+    <Dialog
+        id="exportDialog"
+        title="Export"
+        contentWidth="95%"
+        contentHeight="95%"
+        afterClose="onDialogClose">
+        <content>
+            <VBox
+                class="sapUiSmallMargin"
+                justifyContent="Center"
+                alignItems="Center">
+                <form:SimpleForm
+                    editable="true"
+                    layout="ResponsiveGridLayout"
+                    labelSpanL="3"
+                    labelSpanM="3"
+                    labelSpanS="12"
+                    emptySpanL="0"
+                    emptySpanM="0"
+                    emptySpanS="0"
+                    columnsL="1"
+                    columnsM="1">
+                    <Label text="File format"/>
+                    <ComboBox id="fileFormatComboBox" selectedKey=".pptx">
+                        <items>
+                            <core:Item key=".pptx" text="PowerPoint (Slides)"/>
+                            <core:Item key=".docx" text="Word (A4)"/>
+                            <core:Item key=".html" text="HTML"/>
+                        </items>
+                    </ComboBox>
+                    
+                    <Label text="Template"/>
+                    <VBox>
+                        <ComboBox id="templateComboBox" selectedKey="tum" selectionChange="templateSelectionChange">
+                            <items>
+                                <core:Item key="tum" text="TUM Template (Standard)"/>
+                                <core:Item key="ucc" text="UCC Template"/>
+                                <core:Item key="own" text="Own Template"/>
+                            </items>
+                        </ComboBox>
+                        <VBox id="fileBox" justifyContent="Start" visible="false">
+                            <unified:FileUploader
+                                id="fileUploader"
+                                change="onFileChange"
+                                sameFilenameAllowed="true"
+                                placeholder="Not selected"/>
+                        </VBox>
+                    </VBox>
+                    
+
+                    <Label text="Metadata" class="sapUiSmallMarginBottom"/>
+                    <VBox>
+                        <List id="metadataList" mode="SingleSelectMaster" items="{metadata>/Items}">
+                            <CustomListItem>
+                                <HBox>
+                                    <Label text="{metadata>key}" width="100px" class="sapUiSmallMarginBottom"/>
+                                    <Input value="{metadata>value}" change="metadataInputChange" />
+                                </HBox>
+                            </CustomListItem>
+                        </List>
+                    </VBox>
+                    
+                </form:SimpleForm>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button text="Cancel" press="onCancel"/>
+        </beginButton>
+        <endButton>
+            <Button text="Export" press="onExport"/>
+        </endButton>
+    </Dialog>
+</mvc:View>

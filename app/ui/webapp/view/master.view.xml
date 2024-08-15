@@ -1,0 +1,281 @@
+<mvc:View xmlns:commons="sap.suite.ui.commons" id="masterView" xmlns:rowmodes="sap.ui.table.rowmodes" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="ui.controller.master"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:table="sap.ui.table" xmlns:dnd="sap.ui.core.dnd" xmlns:layout="sap.ui.layout" xmlns:richtexteditor="sap.ui.richtexteditor">
+	<App>
+		<pages>
+			<Page id="masterPage" title="{myModel>name}">
+                <customHeader>
+					<Bar>
+                        <contentLeft>
+                            <core:Icon src="sap-icon://document-text"></core:Icon>
+                            <Text text="{myModel>name}"/>
+                        </contentLeft>
+						<contentRight>
+                            <Button icon="sap-icon://open-folder" text="Open" press="_onDefaultRouteMatched"/>
+							<Button icon="sap-icon://action" text="Export" press="exportPressed"/>
+						</contentRight>
+					</Bar>
+				</customHeader>
+                <content>
+                <l:Splitter>
+                <VBox fitContainer="true">
+                    <layoutData>
+                        <l:SplitterLayoutData size="25%" resizable="false" />
+                    </layoutData>
+                    <HBox height="100%" fitContainer="true">
+                    <table:TreeTable 
+                        id="TreeTable"
+                        selectionMode="None"
+                        enableSelectAll="true"
+                        ariaLabelledBy="title"
+                        cellClick="onTreeCellClick"
+                        rows="{
+                            path : 'myModel>entities',
+                            parameters : {
+                                countMode: 'Inline',
+                                operationMode: 'Client',
+                                treeAnnotationProperties : {
+                                    hierarchyLevelFor : 'hierarchyLevel',
+                                    hierarchyNodeFor : 'entityID',
+                                    hierarchyParentNodeFor : 'parentNodeID',
+                                    hierarchyDrillStateFor : 'drillState'
+                                }
+                            }
+                        }"
+                        >
+                        <table:rowMode>
+                            <rowmodes:Auto rowContentHeight="26px" />
+                        </table:rowMode>
+                        <table:rowSettingsTemplate>
+                            <table:RowSettings highlight="{
+                                formatter: '.formatter.getHighlight',
+                                parts: [
+                                    {path: 'myModel>content/contentType/name'},
+                                    {path: 'myModel>parentNodeID'},
+                                    {path: 'myModel>content/reused'}
+                                ]
+                                }"
+                            >
+                            </table:RowSettings>
+                        </table:rowSettingsTemplate>
+                        <table:dragDropConfig>
+                            <dnd:DragInfo
+                                sourceAggregation="rows"/>
+                        </table:dragDropConfig>
+                        <table:columns>
+                            <table:Column>
+                                <Label text="Document Structure:"/>
+                                <table:template>
+                                    <HBox>
+                                        <items>
+                                            <core:Icon src="sap-icon://refresh" size="0.7rem" class="sapUiTinyMarginEnd" visible="{= ${myModel>content/reused} === true }"/>
+                                            <Text id="fixedText" text="{path: 'myModel>title', formatter: '.formatter.parseTitle'}" wrapping="false"/>
+                                        </items>
+                                    </HBox>
+                                </table:template>
+                            </table:Column>
+                        </table:columns>
+                    </table:TreeTable>
+                    </HBox>
+                </VBox>
+                <VBox>
+                    <layoutData>
+                        <l:SplitterLayoutData size="auto" />
+                    </layoutData>
+                    <IconTabBar backgroundDesign="Solid">
+                        <items>
+                            <IconTabFilter text="Document" visible="false">
+                                <content>
+                                    <VBox id="sectionContainer" visible="{= %{content/contentType/name} === 'Section' }">
+                                    <Label text="Title" />
+                                    <Input value="{path: 'content/source', formatter: '.formatter.parseTitle'}"
+                                        change="onTitleChange" />
+                                    <Label text="Layout" class="sapUiTinyMarginTop"/>
+                                    <RadioButtonGroup class="sapUiTinyMarginBegin" selectedIndex="{path: 'content/source', formatter: '.formatter.parseVertical', targetType: 'any'}" select="onLayoutButtonSelect" columns="2">
+                                        <RadioButton text="Vertical" selected="true" class="sapUiLargeMarginEnd" />
+                                        <RadioButton text="Horizontal" />
+                                    </RadioButtonGroup>
+                                    <HBox>
+                                        <Image src="resources/sys/vertical.png" width="100px" class="sapUiMediumMarginEnd"></Image>
+                                        <Image src="resources/sys/horizontal.png" width="100px"></Image>
+                                    </HBox>
+                                </VBox>
+                                </content>
+                            </IconTabFilter>
+                            <IconTabFilter text="Document" class="customIconTabFilter">
+                                <content>
+                                <VBox>
+                                    <VBox id="rteContainer" fitContainer="true" height="100%" alignItems="Stretch" justifyContent="Start" class="full-height">
+                                    </VBox>
+                                </VBox>
+                                </content>
+                            </IconTabFilter>
+                            <IconTabFilter text="Reuse" class="customIconTabFilter">
+                                <content>
+                                    <VBox>
+                                    <Text class="sapUiTinyMarginBottom"
+                                    wrapping="true" 
+                                                        text="For using the function Reuse: 
+                                                            &#x0A; 1. Drag an Slide from the left side into the area under 'Blocks'. 
+                                                            &#x0A; 2. Select a name e.g. 'reuse1'
+                                                            &#x0A; 3. Use the entity within the document by adding a '#' in front of the name e.g. #reuse1"
+                                                            
+                                                            />
+                                    <HBox height="100%">
+                                        <VBox fitContainer="true" width="228px"  class="sapUiTinyMarginEnd">
+                                            <IconTabBar id="subReuseTabBar" expandable="true" expanded="true">
+                                                <items>
+                                                    <IconTabFilter key="actual"
+                                                        text="Actual">
+                                                        <VBox>
+                                                            <Table id="reuseTable" items="{myModel>reuse}" mode="SingleSelectMaster" selectionChange="onReuseItemPress">
+                                                                <columns>
+                                                                    <Column>
+                                                                        <Text text="Blocks"/>
+                                                                    </Column>
+                                                                </columns>
+                                                                <dragDropConfig>
+                                                                    <dnd:DropInfo
+                                                                        targetAggregation="items"
+                                                                        drop="onDropReuse"/>
+                                                                </dragDropConfig>
+                                                                <items>
+                                                                    <ColumnListItem>
+                                                                        <cells>
+                                                                            <HBox>
+                                                                                <Label text="{myModel>tag}" width="100px" class="sapUiTinyMarginEnd" />
+                                                                                <core:Icon src="sap-icon://copy" press="onCopyPress" class="sapUiSmallMarginEnd" />
+                                                                                <core:Icon src="sap-icon://decline" press="onDeletePress"  />
+                                                                            </HBox>
+                                                                        </cells>
+                                                                    </ColumnListItem>
+                                                                </items>
+                                                            </Table>
+                                                            <Button text="Add new" icon="sap-icon://add" press="onAddReusePress" class="sapUiTinyMarginEnd"/>
+                                                        </VBox>
+                                                    </IconTabFilter>
+                                                    <IconTabFilter key="shared"
+                                                        text="Shared">
+                                                        <VBox>
+                                                            <Table id="reuseSharedTable" items="{path: '/reuse', filters: [{path: 'published', operator: 'EQ', value1: 'true'}]}" mode="SingleSelectMaster" selectionChange="onReuseSharedItemPress">
+                                                                <columns>
+                                                                    <Column>
+                                                                        <Text text="Shared Blocks"/>
+                                                                    </Column>
+                                                                </columns>
+                                                                <items>
+                                                                    <ColumnListItem>
+                                                                        <cells>
+                                                                            <HBox>
+                                                                                <Label text="{formatter:'.formatter.concatenateText', parts: [{path: 'document_documentID'}, {path: 'tag'}]}" width="125px" class="sapUiTinyMarginEnd"/>
+                                                                                <core:Icon src="sap-icon://copy" press="onCopySharedPress" class="sapUiSmallMarginEnd" />
+                                                                                <core:Icon src="sap-icon://decline" press="onDeleteSharedPress"  />
+                                                                            </HBox>
+                                                                        </cells>
+                                                                    </ColumnListItem>
+                                                                </items>
+                                                            </Table>
+                                                        </VBox>
+                                                    </IconTabFilter>
+                                                </items>
+                                            </IconTabBar>
+                                        </VBox>
+                                        <VBox>
+                                        <richtexteditor:RichTextEditor 
+                                        id="reuseRTE"
+                                        value="" 
+                                        width="100%"
+                                        height="300px"
+                                        editorType="TinyMCE5"
+                                        showGroupFont="false"
+                                        showGroupLink="false"
+                                        showGroupInsert="true"
+                                        showGroupClipboard="false"
+                                        showGroupTextAlign="false"
+                                        customToolbar="true"
+                                        ready="onRichTextEditorReady"
+                                        sanitizeValue="false">
+                                        </richtexteditor:RichTextEditor>
+                                        <HBox class="sapUiTinyMarginTop">
+                                            <Button text="Save" icon="sap-icon://save" press="onSaveReusePress" class="sapUiTinyMarginEnd"/>
+                                            <Button text="Save and Publish" icon="sap-icon://add" press="reuseLibraryPress"/>
+                                        </HBox>
+                                        </VBox>
+                                    </HBox>
+                                    </VBox>
+                                </content>
+                            </IconTabFilter>
+                            <IconTabFilter text="Automation" class="customIconTabFilter">
+                                <content>
+                                <VBox>
+                                <Text class="sapUiTinyMarginBottom"
+                                    wrapping="true" 
+                                                        text="For using the function Automation:
+                                                            &#x0A; 1. Add a new automation by using the following format:&#x0A;
+                                                            &#x0A; &#160;&#160;&#160;   Tag: 'info'
+                                                            &#x0A; &#160;&#160;&#160;  URL: https://pages.community.sap.com/topics/abap
+                                                            &#x0A; &#160;&#160;&#160;   Selector: #hero-unit > h2&#x0A;
+                                                            &#x0A; 2. Press Add and Sync
+                                                            &#x0A; 3. Use the entity within the document by adding a '$' in front of the name e.g. $info"
+                                                            
+                                                            />
+                                    <VBox id="AutomationContainer">
+                                        <Table id="automationTable" items="{myModel>automations}">
+                                            <columns>
+                                                <Column width="100px">
+                                                    <Text text="Tag"/>
+                                                </Column>
+                                                <Column width="200px">
+                                                    <Text text="URL"/>
+                                                </Column>
+                                                <Column>
+                                                    <Text text="Value"/>
+                                                </Column>
+                                                <Column width="120px">
+                                                    <Text text="Last Update"/>
+                                                </Column>
+                                                <Column width="95px">
+                                                    <Text text="Screenshot?"/>
+                                                </Column>
+                                                <Column width="95px">
+                                                    <Text text="Credentials?"/>
+                                                </Column>
+                                                <Column width="30px" hAlign="Center">
+                                                    <Text text=""/>
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem>
+                                                    <cells>
+                                                        <Label text="{myModel>tag}"/>
+                                                        <Link text="{myModel>url}" href="{myModel>url}" target="_blank"/>
+                                                        <Label text="{path: 'myModel>result', formatter: '.formatter.parseAutomationResult'}"/>
+                                                        <Label text="{path: 'myModel>lastUpdate', formatter: '.formatter.formatLastUpdate'}"/>
+                                                        <Switch customTextOn="Yes" customTextOff="No" state="{myModel>isScreenshot}" change="switchChangedScreenshot"></Switch>
+                                                        <Switch customTextOn="Yes" customTextOff="No" state="{myModel>credentialsRequired}" change="switchChangedCredentials"></Switch>
+                                                        <core:Icon id="" src="sap-icon://decline" press="onDeletePress" />
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+                                        
+                                        <HBox class="sapUiTinyMarginTop">
+                                            <Input id="automationTagInput" placeholder="Tag" width="100px" liveChange="onTagLiveChange" class="sapUiTinyMarginEnd"/>
+                                            <Input id="urlInput" placeholder="Url" width="200px" class="sapUiTinyMarginEnd"/>
+                                            <Input id="selectorInput" placeholder="Selector" width="200px" class="sapUiTinyMarginEnd"/>
+                                            <Button text="Add" icon="sap-icon://add" press="onAddAutomationPress" class="sapUiTinyMarginEnd"/>
+                                            <Button icon="sap-icon://synchronize" press="onSyncAllPressed" class="sapUiTinyMarginEnd"/>
+                                        </HBox>
+                                        
+                                    </VBox>
+                                    </VBox>
+                                </content>
+                            </IconTabFilter>
+                        </items>
+                    </IconTabBar>
+                </VBox>
+                </l:Splitter>
+                </content>
+            </Page>
+		</pages>
+	</App>
+</mvc:View>

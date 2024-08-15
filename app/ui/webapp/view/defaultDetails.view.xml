@@ -1,0 +1,12 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:form="sap.ui.layout.form" xmlns:richtexteditor="sap.ui.richtexteditor">
+	<App>
+		<pages>
+			<Page title="Welcome">
+				<content>
+					<Label text="Welcome to this nice sap app"></Label>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

@@ -1,0 +1,46 @@
+<mvc:View
+    controllerName="ui.controller.reuseDialog"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form">
+    <Dialog
+        id="reuseDialog"
+        title="Select an Reuse"
+        contentWidth="95%"
+        contentHeight="95%"
+        afterClose="onDialogClose">
+        <content>
+            <form:SimpleForm
+                    editable="true"
+                    layout="ResponsiveGridLayout"
+                    labelSpanL="3"
+                    labelSpanM="3"
+                    labelSpanS="12"
+                    emptySpanL="0"
+                    emptySpanM="0"
+                    emptySpanS="0"
+                    columnsL="1"
+                    columnsM="1">
+                    <Label text="1. Select Project"/>
+                    <ComboBox id="projectComboBox" items="{myModel>/document}" 
+                        selectionChange="projectSelectionChange">
+                        <core:Item key="{myModel>source}" text="{myModel>name}"/>
+                    </ComboBox>
+                    <Label text="2. Select Entity"/>
+                    <ComboBox id="entityComboBox" selectedKey="pptx">
+                    </ComboBox>
+                </form:SimpleForm>
+        </content>
+        <beginButton>
+            <Button
+                text="Cancel"
+                press="onCancel"/>
+        </beginButton>
+        <endButton>
+            <Button
+                text="Add"
+                press="onAdd"/>
+        </endButton>
+    </Dialog>
+</mvc:View>

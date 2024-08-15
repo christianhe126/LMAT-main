@@ -1,0 +1,67 @@
+.horizontalList .sapMListUl {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    list-style-type: none;
+    overflow-x: auto; /* Enables horizontal scrolling if there are many items */
+}
+
+.horizontalList .sapMListUl > li {
+    display: flex;
+    align-items: center; /* Align items vertically in the center if needed */
+    margin-right: 10px; /* Adds spacing between items */
+    margin-top: 20px;
+}
+
+.highlight-section {
+    background-color: #353535 !important; /* Example color */
+}
+
+tr[cssColor=true] {
+    background: #e97070 !important;
+}
+
+span[data-csscolor="grey-text"] {
+    color: grey !important; /* Example color */
+}
+
+.selectedColumn {
+    background-color: grey;
+}
+
+.flexGrow {
+    flex-grow: 1;
+    display: flex;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.sapUiBody {
+    height: 100%;
+}
+
+.vboxContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Viewport height */
+}
+
+.sapUiRTE {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+.full-height {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+.customIconTabFilter .sapMITBFilter {
+    background-color: white !important;
+}
